@@ -14,10 +14,7 @@ class MyList extends Component {
 
     constructor(props) {
         super(props);
-        this.state.data=this.createData();
-        
-        
-        
+        this.state.data=this.createData(); 
     }
 
     createData = () => {
@@ -57,18 +54,14 @@ class MyList extends Component {
             loading: true,
             current_page: this.state.current_page + 1
         });
-       setTimeout(this.finishLoad,250);
-
-       
+       setTimeout(this.finishLoad,250);       
     }
 
     finishLoad = () => {
         this.setState({ loading: false });
-
     }
 
-    handleScroll = (event) => {
-        
+    handleScroll = (event) => {        
         if (
             this.state.hasMore &&
             this.isCloseToBottom(event.nativeEvent.layoutMeasurement, event.nativeEvent.contentOffset, event.nativeEvent.contentSize)            
