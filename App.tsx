@@ -5,12 +5,10 @@ import MyList from './src/components/MyList';
 function App(): JSX.Element {
 
   return (
-    <SafeAreaView>
-      <ScrollView>
+    <SafeAreaView>      
         <View>
           <MyList></MyList>
-        </View>
-      </ScrollView>
+        </View>      
     </SafeAreaView>
   );
 }

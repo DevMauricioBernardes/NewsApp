@@ -15,6 +15,8 @@ class MyList extends Component {
         super(props);
         this.state.data=this.createData();
         
+        
+        
     }
 
     createData = () => {
@@ -41,50 +43,46 @@ class MyList extends Component {
         return newData;
        
     }
-
-    getListOfData = () => {
-        //if (this.state.loading) { return; }
-       // this.setState({ loading: true });
-        let newData = [];
-        newData.push({
-            title: "Lorem ipsum", 
-            text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut in congue risus, non viverra tellus. Nam faucibus ligula non metus ultrices mollis. Cras dolor purus, hendrerit eu eros quis, dignissim eleifend mi. In tincidunt mi in diam egestas congue ac ut purus. Nulla semper libero vitae blandit vehicula.",
-            image: "img1.png",
-            id: this.state.data.length
-        });
-        newData.push({
-            title: "Curabitur vulputate", 
-            text: "Curabitur vulputate enim in lacus imperdiet, a convallis odio posuere. Nulla id ex et purus sodales rutrum non eu eros. Ut consequat est lacus.",
-            image: "img2.png",
-            id: this.state.data.length+1
-        });
-        newData.push({
-            title: "Proin hendrerit", 
-            text: "Proin hendrerit nisl id turpis bibendum, sit amet scelerisque augue elementum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla a blandit sapien.",
-            image: "img3.png",
-            id: this.state.data.length+2
-        });
+    
+    loadData = () => {
+        if (this.state.loading) { return; }
+        console.log('load page:'+ this.state.current_page)
+        this.setState({ loading: true });
+        let newData =this.createData();        
         this.setState({
             hasMore: true,        
             data: [...this.state.data, ...newData],
-            loading: false,
+            loading: true,
             current_page: this.state.current_page + 1
         });
+       setTimeout(this.finishLoad,1000);
+
        
     }
 
-    handleScroll(nativeEvent) {
+    finishLoad = () => {
+        this.setState({ loading: false });
 
-        console.log(nativeEvent)
-    }    
+    }
+
+    handleScroll = (event) => {
+        
+        if (this.isCloseToBottom(event.nativeEvent.layoutMeasurement, event.nativeEvent.contentOffset, event.nativeEvent.contentSize)) {
+            this.loadData()
+        }
+    } 
+    
+    isCloseToBottom(layoutMeasurement, contentOffset, contentSize) {   
+        return (layoutMeasurement.height + contentOffset.y) 
+        >= (contentSize.height - 50); 
+    }
 
     renderList = () => {
         return ( this.state.data.map((u) => {
             return ( 
             <TouchableOpacity key={u.id}>
-                <View style={{ padding: 10 }}>
-                
-                    <Image source={u.image} />
+                <View style={{ padding: 10, borderBottomWidth:1, marginBottom:10 }}>                
+                    <Image style={{height: 250}} source={u.image} />
                     <Text style={{ fontSize: 15}}>{u.title}</Text> 
                     <Text>{u.text}</Text>
                 </View>
