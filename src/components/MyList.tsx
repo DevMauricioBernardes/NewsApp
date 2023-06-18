@@ -7,6 +7,7 @@ class MyList extends Component {
         loading: false,
         data: [],
         current_page: 1,
+        total_pages: 20,
         error: null,
         hasMore: true
     }
@@ -49,13 +50,14 @@ class MyList extends Component {
         console.log('load page:'+ this.state.current_page)
         this.setState({ loading: true });
         let newData =this.createData();        
+        let hasMoreData = this.state.total_pages > this.state.current_page;
         this.setState({
-            hasMore: true,        
+            hasMore: hasMoreData,        
             data: [...this.state.data, ...newData],
             loading: true,
             current_page: this.state.current_page + 1
         });
-       setTimeout(this.finishLoad,1000);
+       setTimeout(this.finishLoad,250);
 
        
     }
@@ -67,7 +69,10 @@ class MyList extends Component {
 
     handleScroll = (event) => {
         
-        if (this.isCloseToBottom(event.nativeEvent.layoutMeasurement, event.nativeEvent.contentOffset, event.nativeEvent.contentSize)) {
+        if (
+            this.state.hasMore &&
+            this.isCloseToBottom(event.nativeEvent.layoutMeasurement, event.nativeEvent.contentOffset, event.nativeEvent.contentSize)            
+        ) {
             this.loadData()
         }
     } 
